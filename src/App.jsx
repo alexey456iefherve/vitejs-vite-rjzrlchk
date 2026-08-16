@@ -37,7 +37,7 @@ export default function App() {
 
     // Создаем холст
     const canvas = new fabric.Canvas(canvasRef.current, {
-      width: 600,
+      width: 640,
       height: 400,
       backgroundColor: '#ffffff',
     });
