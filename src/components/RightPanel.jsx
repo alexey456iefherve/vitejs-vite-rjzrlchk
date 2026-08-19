@@ -17,23 +17,38 @@ export default function RightPanel({
   onFontFamilyChange,
   onBringToFront,
   onSendToBack,
-  // 🟢 Новые пропсы для типа кисти
+
   brushType,
   onBrushTypeChange,
+  isDarkMode,
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
   if (!isOpen) {
     return (
-      <button onClick={() => setIsOpen(true)} style={toggleOpenBtnStyle}>
+      <button onClick={() => setIsOpen(true)} 
+      style={{
+        ...toggleOpenBtnStyle,
+        backgroundColor: isDarkMode ? '#1e293b' : '#f8f9fa',
+        borderColor: isDarkMode ? '#334155' : '#e2e8f0',
+        color: isDarkMode ? '#f8fafc' : '#1e293b',
+      }}
+      >
         ◀
       </button>
     );
   }
 
   return (
-    <div style={panelStyle}>
-      <div style={headerStyle}>
+    <div 
+    style={{
+      ...panelStyle,
+      backgroundColor: isDarkMode ? '#1e293b' : '#f8f9fa',
+      borderColor: isDarkMode ? '#334155' : '#e2e8f0',
+      color: isDarkMode ? '#f8fafc' : '#1e293b',
+    }}
+    >
+      <div style={{ ...headerStyle, borderBottomColor: isDarkMode ? '#334155' : '#ddd' }}>
         <h4 style={{ margin: 0 }}>Свойства</h4>
         <button onClick={() => setIsOpen(false)} style={closeBtnStyle}>
           ✕
@@ -42,15 +57,15 @@ export default function RightPanel({
 
       {/* Цвет */}
       <div style={controlGroupStyle}>
-        <label style={labelStyle}>Цвет:</label>
+      <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>Цвет:</label>
         <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
           <input
             type="color"
             value={textColor}
             onChange={(e) => onColorChange(e.target.value)}
-            style={colorPickerStyle}
+            style={{ ...colorPickerStyle, borderColor: isDarkMode ? '#334155' : '#ccc' }}
           />
-          <span style={{ fontSize: '11px', fontFamily: 'monospace' }}>
+          <span style={{ fontSize: '11px', fontFamily: 'monospace', color: isDarkMode ? '#cbd5e1' : '#000' }}>
             {textColor}
           </span>
         </div>
@@ -59,24 +74,27 @@ export default function RightPanel({
       {/* НАСТРОЙКА КИСТИ (Показывается только в режиме рисования) */}
       {isDrawing ? (
         <div
-          style={{
-            ...controlGroupStyle,
-            backgroundColor: '#eef2f7',
-            padding: '8px',
-            borderRadius: '4px',
-            gap: '9px',
-          }}
+        style={{
+          ...controlGroupStyle,
+          backgroundColor: isDarkMode ? '#334155' : '#eef2f7', // Темная или светлая подложка для кисти
+          padding: '8px',
+          borderRadius: '4px',
+          gap: '9px',
+        }}
         >
           {/* ВЫБОР ФОРМЫ КИСТИ */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
-            <label style={labelStyle}>Форма кисти:</label>
+            <label style={{ ...labelStyle, color: isDarkMode ? '#cbd5e1' : '#555' }}>Форма кисти:</label>
             <select
               value={brushType}
               onChange={(e) => onBrushTypeChange(e.target.value)}
               style={{
                 padding: '4px',
                 borderRadius: '4px',
-                border: '1px solid #cbd5e1',
+                border: '1px solid',
+                borderColor: isDarkMode ? '#475569' : '#cbd5e1',
+                backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                color: isDarkMode ? '#f8fafc' : '#1e293b',
                 fontSize: '13px',
               }}
             >
@@ -88,8 +106,7 @@ export default function RightPanel({
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '3px' }}>
             <label
-              style={{ ...labelStyle, color: '#e67e22', fontWeight: 'bold' }}
-            >
+              style={{ ...labelStyle, color: '#e67e22', fontWeight: 'bold' }}>
               Толщина кисти: {brushWidth}px
             </label>
             <input
@@ -107,7 +124,7 @@ export default function RightPanel({
           {/* Слайдеры для фигур показываем, только когда НЕ рисуем */}
           {/* ВЫБОР СТИЛЯ ШРИФТА */}
           <div style={controlGroupStyle}>
-            <label style={labelStyle}>Семейство шрифта:</label>
+          <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>Семейство шрифта:</label>
             <select
               value={fontFamily}
               onChange={(e) => onFontFamilyChange(e.target.value)}
@@ -115,9 +132,10 @@ export default function RightPanel({
                 width: '100%',
                 padding: '6px',
                 borderRadius: '4px',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#ffffff',
-                color: '#1e293b',
+                border: '1px solid',
+                borderColor: isDarkMode ? '#475569' : '#cbd5e1',
+                backgroundColor: isDarkMode ? '#1e293b' : '#ffffff',
+                color: isDarkMode ? '#f8fafc' : '#1e293b',
                 fontSize: '13px',
                 cursor: 'pointer',
                 fontFamily: fontFamily,
@@ -164,7 +182,7 @@ export default function RightPanel({
 
           {/* Размер текста */}
           <div style={controlGroupStyle}>
-            <label style={labelStyle}>Размер шрифта: {fontSize}px</label>
+          <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>Размер шрифта: {fontSize}px</label>
             <input
               type="range"
               min="10"
@@ -177,7 +195,7 @@ export default function RightPanel({
 
           {/* Вращение объекта */}
           <div style={controlGroupStyle}>
-            <label style={labelStyle}>Поворот: {rotation}°</label>
+          <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>Поворот: {rotation}°</label>
             <input
               type="range"
               min="0"
@@ -190,7 +208,7 @@ export default function RightPanel({
 
           {/* Прозрачность */}
           <div style={controlGroupStyle}>
-            <label style={labelStyle}>
+          <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>
               Прозрачность: {Math.round(opacity * 100)}%
             </label>
             <input
@@ -209,7 +227,7 @@ export default function RightPanel({
       {/* БЛОК ИЗМЕНЕНИЯ СЛОЕВ ОБЪЕКТА */}
       {!isDrawing && (
         <div style={controlGroupStyle}>
-          <label style={labelStyle}>Порядок слоев:</label>
+          <label style={{ ...labelStyle, color: isDarkMode ? '#94a3b8' : '#555' }}>Порядок слоев:</label>
           <div style={{ display: 'flex', gap: '5px' }}>
             <button onClick={onBringToFront} style={layerBtnStyle}>
               🔼 На фото (Наверх)

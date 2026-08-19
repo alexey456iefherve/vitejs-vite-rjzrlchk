@@ -21,6 +21,7 @@ export default function App() {
   const [redoHistory, setRedoHistory] = useState([]); // Стек для Redo
   const isSavingHistory = useRef(false); // Флаг, чтобы избежать зацикливания при откате
   const clipboardRef = useRef(null); // Хранилище для скопированного объекта
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [isEraser, setIsEraser] = useState(false);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -507,29 +508,52 @@ export default function App() {
     URL.revokeObjectURL(blobUrl);
   };
 
+  // Метод для получения цвета в зависимости от выбранной темы
+  const getThemeColor = (element) => {
+     const colors = {
+    bgApp: isDarkMode ? '#0f172a' : '#f8fafc',      // Фон страницы
+    bgPanel: isDarkMode ? '#1e293b' : '#ffffff',    // Фон панелей и меню
+    textMain: isDarkMode ? '#f8fafc' : '#1e293b',   // Главный текст
+    textMuted: isDarkMode ? '#94a3b8' : '#334155',  // Текст кнопок меню
+    border: isDarkMode ? '#334155' : '#e2e8f0',     // Границы элементов
+  };
+  return colors[element] || 'transparent';
+};
+
   return (
     <div
       style={{
         fontFamily: 'sans-serif',
-        backgroundColor: '#f8fafc',
+        backgroundColor: isDarkMode ? '#0f172a' : '#f8fafc',
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
+        transition: 'background-color 0.3s ease',
       }}
     >
       {/* 👑 ВЕРХНЕЕ МЕНЮ */}
-      <div style={menubarStyle}>
+      <div 
+        style={{ 
+          ...menubarStyle, 
+          backgroundColor: isDarkMode ? '#1e293b' : '#ffffff', // Меняем фон меню
+          borderBottomColor: isDarkMode ? '#334155' : '#e2e8f0', // Меняем цвет границы
+          transition: 'background-color 0.3s ease, border-color 0.3s ease'
+        }}
+      >
         <div className="menu-tab" style={{ position: 'relative' }}>
           <button
             onClick={() => setActiveMenu(activeMenu === 'file' ? null : 'file')}
-            style={menuBtnStyle}
+            style={{ 
+              ...menuBtnStyle, 
+              color: isDarkMode ? '#f8fafc' : '#334155' // Светлый текст в темной теме
+            }}
           >
             Файл
           </button>
           {activeMenu === 'file' && (
-            <div style={dropdownStyle}>
-              <label style={dropdownItemStyle}>
+             <div style={{ ...dropdownStyle, backgroundColor: isDarkMode ? '#1e293b' : '#ffffff', borderColor: isDarkMode ? '#334155' : '#e2e8f0' }}>
+             <label style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}>
                 📁 Открыть фото...
                 <input
                   type="file"
@@ -542,7 +566,7 @@ export default function App() {
                 />
               </label>
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   downloadImage();
                   setActiveMenu(null);
@@ -551,7 +575,7 @@ export default function App() {
                 💾 Экспорт в PNG
               </div>
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   downloadSVG();
                   setActiveMenu(null);
@@ -563,7 +587,7 @@ export default function App() {
                 style={{
                   margin: '4px 0',
                   border: 'none',
-                  borderTop: '1px solid #e2e8f0',
+                  borderTop: `1px solid ${isDarkMode ? '#334155' : '#e2e8f0'}`,
                 }}
               />
               <div
@@ -580,19 +604,19 @@ export default function App() {
         </div>
 
         <div className="menu-tab" style={{ position: 'relative' }}>
-          <button
+        <button
             onClick={() => setActiveMenu(activeMenu === 'edit' ? null : 'edit')}
-            style={menuBtnStyle}
+            style={{ ...menuBtnStyle, color: isDarkMode ? '#f8fafc' : '#334155' }}
           >
             Редактирование
           </button>
           {activeMenu === 'edit' && (
-            <div style={dropdownStyle}>
+             <div style={{ ...dropdownStyle, backgroundColor: isDarkMode ? '#1e293b' : '#ffffff', borderColor: isDarkMode ? '#334155' : '#e2e8f0' }}>
               {/* ↩️ ШАГ НАЗАД */}
               <div
                 style={{
                   ...dropdownItemStyle,
-                  color: history.length <= 1 ? '#94a3b8' : '#1e293b',
+                  color: history.length <= 1 ? '#94a3b8' : (isDarkMode ? '#f8fafc' : '#1e293b'),
                   cursor: history.length <= 1 ? 'not-allowed' : 'pointer',
                 }}
                 onClick={() => {
@@ -609,7 +633,7 @@ export default function App() {
               <div
                 style={{
                   ...dropdownItemStyle,
-                  color: redoHistory.length === 0 ? '#94a3b8' : '#1e293b',
+                  color: redoHistory.length === 0 ? '#94a3b8' : (isDarkMode ? '#f8fafc' : '#1e293b'),
                   cursor: redoHistory.length === 0 ? 'not-allowed' : 'pointer',
                 }}
                 onClick={() => {
@@ -624,7 +648,7 @@ export default function App() {
 
               {/* 📝 РЕДАКТИРОВАТЬ ТЕКСТ */}
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   editText();
                   setActiveMenu(null);
@@ -637,12 +661,12 @@ export default function App() {
                 style={{
                   margin: '4px 0',
                   border: 'none',
-                  borderTop: '1px solid #e2e8f0',
+                  borderTop: `1px solid ${isDarkMode ? '#334155' : '#e2e8f0'}`,
                 }}
               />
 
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   copyObject();
                   setActiveMenu(null);
@@ -651,7 +675,7 @@ export default function App() {
                 📄 Копировать объект (Copy)
               </div>
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   pasteObject();
                   setActiveMenu(null);
@@ -660,7 +684,7 @@ export default function App() {
                 📋 Вставить объект (Paste)
               </div>
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   deleteSelected();
                   setActiveMenu(null);
@@ -669,7 +693,7 @@ export default function App() {
                 🗑️ Удалить выбранное
               </div>
               <div
-                style={dropdownItemStyle}
+                style={{ ...dropdownItemStyle, color: isDarkMode ? '#f8fafc' : '#1e293b' }}
                 onClick={() => {
                   toggleDrawing();
                   setActiveMenu(null);
@@ -680,7 +704,29 @@ export default function App() {
             </div>
           )}
         </div>
-      </div>
+                {/* КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ (ИКОНКА) */}
+                <button
+          onClick={() => setIsDarkMode(!isDarkMode)}
+          title={isDarkMode ? 'Включить светлую тему' : 'Включить темную тему'}
+          style={{
+            marginLeft: 'auto', // Выталкивает кнопку в самый правый угол меню
+            background: 'none',
+            border: 'none',
+            fontSize: '20px',    // Размер иконки
+            cursor: 'pointer',
+            padding: '4px 8px',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'transform 0.2s ease',
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.15)'}
+          onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+        >
+          {isDarkMode ? '☀️' : '🌙'}
+        </button>
+      </div> {/* <-- Это оригинальный закрывающий тег вашего верхнего меню */}
 
       {/* КОНТЕНТ */}
       <div
@@ -696,8 +742,9 @@ export default function App() {
             textAlign: 'center',
             marginBottom: '20px',
             fontSize: '24px',
-            color: '#1e293b',
+            color: isDarkMode ? '#f8fafc' : '#1e293b',
             marginTop: '10px',
+            transition: 'color 0.3s ease',
           }}
         >
           PRO Фоторедактор
@@ -714,6 +761,7 @@ export default function App() {
             isEraser={isEraser}
             onToggleEraser={toggleEraser}
             onAddHexagon={addHexagon}
+            isDarkMode={isDarkMode} 
           />
 
           <div
@@ -756,6 +804,7 @@ export default function App() {
             onSendToBack={sendToBack}
             brushType={brushType}
             onBrushTypeChange={handleBrushTypeChange}
+            isDarkMode={isDarkMode} 
           />
         </div>
       </div>

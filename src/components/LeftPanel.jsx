@@ -8,22 +8,42 @@ export default function LeftPanel({
   onAddHexagon,
   isDrawing,
   onToggleDrawing,
-  isEraser, // Принимаем состояние ластика из App.jsx
-  onToggleEraser, // Принимаем функцию переключения ластика из App.jsx
+  isEraser, 
+  onToggleEraser,
+  isDarkMode,
 }) {
   const [isOpen, setIsOpen] = useState(true);
 
   if (!isOpen) {
     return (
-      <button onClick={() => setIsOpen(true)} style={toggleOpenBtnStyle}>
+      <button onClick={() => setIsOpen(true)} 
+      style={{
+        ...toggleOpenBtnStyle,
+        backgroundColor: isDarkMode ? '#1e293b' : '#f8f9fa',
+        borderColor: isDarkMode ? '#334155' : '#e2e8f0',
+        color: isDarkMode ? '#f8fafc' : '#1e293b',
+      }}
+      >
         ▶
       </button>
     );
   }
 
   return (
-    <div style={panelStyle}>
-      <div style={headerStyle}>
+    <div 
+    style={{
+      ...panelStyle,
+      backgroundColor: isDarkMode ? '#1e293b' : '#f8f9fa',
+      borderColor: isDarkMode ? '#334155' : '#e2e8f0',
+      color: isDarkMode ? '#f8fafc' : '#1e293b'
+    }}
+  >
+       <div 
+        style={{
+          ...headerStyle,
+          borderBottomColor: isDarkMode ? '#334155' : '#ddd'
+        }}
+      >
         <h4 style={{ margin: 0 }}>Инструменты</h4>
         <button onClick={() => setIsOpen(false)} style={closeBtnStyle}>
           ✕
