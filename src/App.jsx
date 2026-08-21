@@ -250,6 +250,24 @@ export default function App() {
     fabricRef.current.renderAll();
   };
 
+  const addLine = () => {
+    if (!fabricRef.current) return;
+    
+    // Создаем линию: координаты [startX, startY, endX, endY]
+    // В Fabric v6 Line принимает массив координат первым аргументом
+    const line = new fabric.Line([50, 50, 250, 50], {
+      stroke: textColor,       // Цвет линии берем из правой панели
+      strokeWidth: brushWidth, // Толщину берем из ползунка ширины кисти
+      opacity: opacity,
+      left: 200,
+      top: 200,
+    });
+
+    fabricRef.current.add(line);
+    fabricRef.current.setActiveObject(line);
+    fabricRef.current.renderAll();
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (!file || !fabricRef.current) return;
@@ -529,7 +547,7 @@ export default function App() {
         display: 'flex',
         flexDirection: 'column',
         position: 'relative',
-        transition: 'background-color 0.3s ease',
+        transition: 'background-color 0.3s ease', 
       }}
     >
       {/* 👑 ВЕРХНЕЕ МЕНЮ */}
@@ -704,12 +722,50 @@ export default function App() {
             </div>
           )}
         </div>
+
+        <a
+          href="https://github.com/alexey456iefherve/vitejs-vite-rjzrlchk" // <-- ЗАМЕНИТЕ НА ВАШУ ССЫЛКУ
+          target="_blank"
+          rel="noopener noreferrer"
+          title="Открыть проект на GitHub"
+          style={{
+            marginLeft: 'auto', // Выталкивает иконку и кнопку темы в правый угол
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '6px',
+            borderRadius: '50%',
+            cursor: 'pointer',
+            transition: 'transform 0.2s ease, background-color 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'scale(1.15)';
+            e.currentTarget.style.backgroundColor = isDarkMode ? '#334155' : '#f1f5f9';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'scale(1)';
+            e.currentTarget.style.backgroundColor = 'transparent';
+          }}
+        >
+          {/* Качественная SVG иконка GitHub, меняющая цвет в зависимости от темы */}
+          <svg
+            height="22"
+            width="22"
+            viewBox="0 0 16 16"
+            style={{
+              fill: isDarkMode ? '#f8fafc' : '#334155',
+              transition: 'fill 0.3s ease'
+            }}
+          >
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+          </svg>
+        </a>
                 {/* КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ (ИКОНКА) */}
                 <button
           onClick={() => setIsDarkMode(!isDarkMode)}
           title={isDarkMode ? 'Включить светлую тему' : 'Включить темную тему'}
           style={{
-            marginLeft: 'auto', // Выталкивает кнопку в самый правый угол меню
+            marginLeft: '5px',
             background: 'none',
             border: 'none',
             fontSize: '20px',    // Размер иконки
@@ -729,14 +785,8 @@ export default function App() {
       </div> {/* <-- Это оригинальный закрывающий тег вашего верхнего меню */}
 
       {/* КОНТЕНТ */}
-      <div
-        style={{
-          padding: '10px 20px',
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
+      <div style={{ padding: '10px 20px', flex: 1, display: 'flex', flexDirection: 'column', }}>
+      
         <h1
           style={{
             textAlign: 'center',
@@ -756,6 +806,7 @@ export default function App() {
             onAddText={addText}
             onAddRect={addRectangle}
             onAddTriangle={addTriangle}
+            onAddLine={addLine}
             isDrawing={isDrawing}
             onToggleDrawing={toggleDrawing}
             isEraser={isEraser}

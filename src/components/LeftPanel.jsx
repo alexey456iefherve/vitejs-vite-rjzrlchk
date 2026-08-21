@@ -6,6 +6,7 @@ export default function LeftPanel({
   onAddRect,
   onAddTriangle,
   onAddHexagon,
+  onAddLine,
   isDrawing,
   onToggleDrawing,
   isEraser, 
@@ -71,6 +72,9 @@ export default function LeftPanel({
       </button>
       <button onClick={onAddHexagon} style={btnStyle}>
         ⬡ Шестиугольник
+      </button>
+      <button onClick={onAddLine} style={btnStyle}>
+        ➖ Линия
       </button>
 
       {/* КНОПКА СВОБОДНОГО РИСОВАНИЯ */}
